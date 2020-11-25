@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <lcarte.h>
+#include <voyants.h>
 #include <baseclient.h>
 #include <memoire_borne.h>
 #include <donnees_borne.h>
@@ -25,45 +26,21 @@ void lecteurcarte_lire_carte()
   printf("numero lu : %d \n", numero);
  }
 
- if(carte_inseree()/*&&voyants disponible*/)
+ if(carte_inseree())
  {  
-   baseclient_authentifier(numero);
-
-   if(baseclient_authentifier(numero)==1)
+   printf("auth %d \n",baseclient_authentifier(numero));
+ 
+   if(baseclient_authentifier(numero)) 
    {
-
-     if(io->timer_sec%2==0&& io->timer_sec==8)
-     {
-       io->led_charge=VERT;
-     }
-     else if(io->bouton_charge==1)
-     {
-       io->led_dispo=OFF;
-       io->timer_sec=8;
-       io->bouton_charge=0;
-     }
-     else
-     {
-       io->led_charge=OFF;
-       io->timer_sec=0;
-     }
-     if(io->led_dispo==OFF/*&&carte_retiree()*/)
-     {
-       //charger batterie
-     }
-     else if(io->timer_sec%2==0&&io->timer_sec==8)
-     {
-       io->led_defaut=ROUGE;
-     }
-     else
-     {
-       io->led_defaut=ROUGE;
-       io->timer_sec=0;
-     }
+      printf("coucou2");
+      voyants_set_charge();
    }
-   
+   else
+   {
+      printf("coucou \n");
+      voyants_set_defaut();
+   }
  }
-
  attente_retrait_carte();
  liberation_ports();
 }
